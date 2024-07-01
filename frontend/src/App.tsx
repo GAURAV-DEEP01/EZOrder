@@ -36,7 +36,7 @@ const App: React.FC = () => {
           }
         />
         <Route
-          path="/admin/qr"
+          path="/admin/kitchen"
           element={
             <ProtectedRoute>
               <Kitchen />
