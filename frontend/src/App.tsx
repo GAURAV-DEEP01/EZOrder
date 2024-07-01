@@ -1,4 +1,3 @@
-// src/App.tsx
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Order } from "./pages/Order";
@@ -9,8 +8,8 @@ import Admin from "./pages/Admin";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import "./App.css";
 import { QrPage } from "./pages/QrPage";
-import { EditItem } from "./pages/EditItem";
 import { ScanQr } from "./pages/ScanQr";
+import { Kitchen } from "./pages/Kitchen";
 
 const App: React.FC = () => {
   return (
@@ -33,6 +32,14 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <ScanQr />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/qr"
+          element={
+            <ProtectedRoute>
+              <Kitchen />
             </ProtectedRoute>
           }
         />
