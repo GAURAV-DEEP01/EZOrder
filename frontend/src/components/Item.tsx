@@ -1,6 +1,3 @@
-
 export default function OrderItem() {
-  return (
-    <div>OrderItem</div>
-  )
+  return <div>OrderItem</div>;
 }

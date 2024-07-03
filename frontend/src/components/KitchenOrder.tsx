@@ -1,6 +1,3 @@
-
 export default function KitchenOrder() {
-  return (
-    <div>KitchenOrder</div>
-  )
+  return <div>KitchenOrder</div>;
 }
