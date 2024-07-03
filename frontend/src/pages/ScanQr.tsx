@@ -3,6 +3,7 @@ export const ScanQr = () => {
     <div>
       <div className="flex justify-center">
         <div>QR scanning page</div>
+        <div>Order Confirm page</div>
       </div>
     </div>
   );
