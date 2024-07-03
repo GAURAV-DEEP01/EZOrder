@@ -8,4 +8,5 @@ const itemSchema = new mongoose.Schema({
   image: { type: String, required: true },
 });
 
-module.exports = mongoose.model("Items", itemSchema);
+const Items = mongoose.model("Items", itemSchema);
+export default Items;

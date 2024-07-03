@@ -2,13 +2,10 @@ import mongoose, { ConnectOptions } from "mongoose";
 
 const connectMongoDb = async (mongodbUrl: string) => {
   try {
-    await mongoose.connect(mongodbUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as ConnectOptions);
+    await mongoose.connect(mongodbUrl);
     console.info("MongoDB Connected...");
   } catch (e) {
-    console.error("Error connecting to mongodb", e);
+    console.error("Error connecting to MongoDB", e);
   }
 };
 
