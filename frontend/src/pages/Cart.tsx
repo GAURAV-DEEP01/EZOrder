@@ -1,4 +1,4 @@
-import OrderItem from "../components/Item";
+import OrderItem from "../components/ItemCard";
 import { Navabar } from "../components/Navabar";
 
 export const Cart = () => {
