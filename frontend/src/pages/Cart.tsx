@@ -1,10 +1,10 @@
 import OrderItem from "../components/ItemCard";
-import { Navabar } from "../components/Navabar";
+import { Navbar } from "../components/Navbar";
 
 export const Cart = () => {
   return (
     <div>
-      <Navabar />
+      <Navbar />
       <h2>Ordered Items</h2>
       <div>
         <OrderItem />
