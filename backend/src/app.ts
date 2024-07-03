@@ -4,8 +4,8 @@ import express from "express";
 const app = express();
 import { db } from "./database/db";
 //route
-import itemRouter from "./routs/ItemRout";
-import orderRouter from "./routs/orderRout";
+import itemRouter from "./routes/ItemRoute";
+import orderRouter from "./routes/orderRoute";
 
 db.connectMongoDb(process.env.MONGODB_URL as string);
 
