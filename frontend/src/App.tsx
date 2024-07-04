@@ -11,6 +11,8 @@ import { QrPage } from "./pages/QrPage";
 import { ScanQr } from "./pages/ScanQr";
 import { Kitchen } from "./pages/Kitchen";
 
+export const BACKEND_URL = "http://localhost:9000";
+
 const App: React.FC = () => {
   return (
     <BrowserRouter>
