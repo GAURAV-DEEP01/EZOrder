@@ -1,4 +1,6 @@
-interface Items_t {
+import { Document } from "mongoose";
+
+interface Items_t extends Document`` {
   id: string;
   name: string;
   price: number;

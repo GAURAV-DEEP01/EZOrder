@@ -7,13 +7,26 @@ const router = Router();
 router.get("/", async (req, res) => {
   try {
     const allItems = await dbUtil.getAllItems();
-    if (!allItems) throw new Error("Items find failed");
     res.status(200).send({ success: true, msg: "Items data", data: allItems });
   } catch (e) {
     if (e instanceof Error)
       res.status(500).send({
         success: false,
         msg: "Items Couldn't be fetched",
+        error: e.message,
+      });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const item = await dbUtil.getItem(req.params as Items_t);
+    res.status(200).send({ success: true, msg: "Item found", data: item });
+  } catch (e) {
+    if (e instanceof Error)
+      res.status(500).send({
+        success: false,
+        msg: "Item find failed",
         error: e.message,
       });
   }
