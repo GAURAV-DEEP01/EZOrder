@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
   try {
     const allItems = await dbUtil.getAllItems();
     if (!allItems) throw new Error("Items find failed");
-    res.status(200).send({ success: true, msg: "Items data", items: allItems });
+    res.status(200).send({ success: true, msg: "Items data", data: allItems });
   } catch (e) {
     if (e instanceof Error)
       res.status(500).send({
