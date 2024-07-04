@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { populateItems } from "../init/populateDb";
 import { dbUtil } from "../database/dbUtils";
+import Items_t from "../types/items";
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -13,6 +14,20 @@ router.get("/", async (req, res) => {
       res.status(500).send({
         success: false,
         msg: "Items Couldn't be fetched",
+        error: e.message,
+      });
+  }
+});
+
+router.patch("/:id", async (req, res) => {
+  try {
+    await dbUtil.updateItemQuantity(req.params as Items_t, req.body as Items_t);
+    res.status(200).send({ success: true, msg: "Update Complete" });
+  } catch (e) {
+    if (e instanceof Error)
+      res.status(500).send({
+        success: false,
+        msg: "Updation failed",
         error: e.message,
       });
   }
