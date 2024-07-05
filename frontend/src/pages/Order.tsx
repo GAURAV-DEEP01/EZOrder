@@ -22,6 +22,7 @@ export const Order = () => {
   const [items, setItems] = useState<Item[]>([]);
   const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [zeroQuantityItems, setZeroQuantityItems] = useState<Item[]>([]);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -31,7 +32,21 @@ export const Order = () => {
           msg: string;
           data: Item[];
         }>(BACKEND_URL + "/items/");
-        setItems(res.data.data);
+        const fetchedItems = res.data.data;
+
+        const zeroQtyItems = fetchedItems.filter(
+          (item) => item.availableQuantity === 0
+        );
+        const nonZeroQtyItems = fetchedItems.filter(
+          (item) => item.availableQuantity > 0
+        );
+
+        const sortedItems = nonZeroQtyItems.sort(
+          (a, b) => b.soldQuantity - a.soldQuantity
+        );
+
+        setItems(sortedItems);
+        setZeroQuantityItems(zeroQtyItems);
       } catch (error) {
         console.error("Error fetching items:", error);
       }
@@ -65,10 +80,6 @@ export const Order = () => {
     );
   };
 
-  useEffect(() => {
-    console.log(currentOrder);
-  }, [currentOrder]);
-
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
@@ -82,7 +93,17 @@ export const Order = () => {
       <div className="flex justify-center mt-24">
         <div className="flex-col text-center">
           <div className="space-y-6 w-screen">
-            {filteredItems.map((item) => (
+            {filteredItems.map((item, index) => (
+              <ItemCard
+                key={item._id}
+                item={item}
+                currentOrder={currentOrder}
+                handleAddItem={handleAddItem}
+                handleQuantityChange={handleQuantityChange}
+                isTrending={index < 3}
+              />
+            ))}
+            {zeroQuantityItems.map((item) => (
               <ItemCard
                 key={item._id}
                 item={item}
