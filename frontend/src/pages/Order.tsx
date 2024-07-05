@@ -3,6 +3,7 @@ import { Navbar } from "../components/Navbar";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
 import ItemCard from "../components/ItemCard";
+import { useOrder } from "../contexts/OrderContext";
 
 export interface Item {
   _id: string;
@@ -13,14 +14,9 @@ export interface Item {
   image: string;
 }
 
-export interface OrderItem {
-  _id: string;
-  quantity: number;
-}
-
 export const Order = () => {
-  const [items, setItems] = useState<Item[]>([]);
-  const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
+  const { items, setItems, currentOrder, addItem, updateQuantity } = useOrder();
+
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [zeroQuantityItems, setZeroQuantityItems] = useState<Item[]>([]);
 
@@ -53,31 +49,14 @@ export const Order = () => {
     };
 
     fetchItems();
-  }, []);
+  }, [setItems]);
 
   const handleAddItem = (item: Item) => {
-    setCurrentOrder((prevOrder) => {
-      const existingItem = prevOrder.find(
-        (orderItem) => orderItem._id === item._id
-      );
-      if (existingItem) {
-        return prevOrder.map((orderItem) =>
-          orderItem._id === item._id
-            ? { ...orderItem, quantity: orderItem.quantity + 1 }
-            : orderItem
-        );
-      } else {
-        return [...prevOrder, { _id: item._id, quantity: 1 }];
-      }
-    });
+    addItem(item);
   };
 
   const handleQuantityChange = (itemId: string, quantity: number) => {
-    setCurrentOrder((prevOrder) =>
-      prevOrder.map((orderItem) =>
-        orderItem._id === itemId ? { ...orderItem, quantity } : orderItem
-      )
-    );
+    updateQuantity(itemId, quantity);
   };
 
   const filteredItems = items.filter((item) =>
