@@ -1,4 +1,3 @@
-import { Navbar } from "../components/Navbar";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
 import logo from "../assets/logo.svg";
