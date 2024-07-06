@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const OrderSchema = new mongoose.Schema({
-  orderNo: { type: Number, required: true },
+  orderNo: { type: Number, default: 99 },
   items: [
     {
-      itemId: {
+      id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Item",
+        required: true,
       },
       quantity: { type: Number, required: true },
     },

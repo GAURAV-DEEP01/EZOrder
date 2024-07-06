@@ -1,6 +1,6 @@
 import { Document } from "mongoose";
 
-interface Items_t extends Document`` {
+interface Items_t extends Document {
   id: string;
   name: string;
   price: number;

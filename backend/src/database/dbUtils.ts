@@ -1,6 +1,8 @@
+import mongoose from "mongoose";
 import Items from "../models/itemModel";
 import Orders from "../models/orderModel";
 import Item_t from "../types/items";
+import { Orders_t, OrderedItem_t } from "../types/orders";
 
 const getItem = async (param: Item_t): Promise<Item_t> => {
   try {
@@ -37,4 +39,36 @@ const updateItemQuantity = async (
   await Items.updateOne(filter, set);
 };
 
-export const dbUtil = { getItem, getAllItems, updateItemQuantity };
+const getAllOrders = async (): Promise<Orders_t[]> => {
+  try {
+    const order: Orders_t[] = await Orders.find().select("-__v  -items._id");
+    if (order.length == 0) throw new Error("No orders available");
+    return order;
+  } catch (e) {
+    throw new Error("Unable to fetch orders" + e);
+  }
+};
+
+const placeOrder = async (
+  ordereditems: OrderedItem_t[]
+): Promise<mongoose.Schema.Types.ObjectId> => {
+  try {
+    const newOrder: Orders_t = new Orders({
+      items: ordereditems,
+      status: "ordered",
+      date: new Date(),
+    });
+    await newOrder.save();
+    return newOrder.id;
+  } catch (e) {
+    throw e;
+  }
+};
+
+export const dbUtil = {
+  getItem,
+  getAllItems,
+  updateItemQuantity,
+  placeOrder,
+  getAllOrders,
+};
