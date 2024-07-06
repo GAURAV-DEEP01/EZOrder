@@ -25,6 +25,22 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [qrImage, setQrImage] = useState<string>();
   const [orderId, setOrderId] = useState<string>("");
 
+  useEffect(() => {
+    const storedOrder = localStorage.getItem("order");
+    if (storedOrder) {
+      const parsedOrder = JSON.parse(storedOrder);
+      const now = new Date();
+      const orderDate = new Date(parsedOrder.date);
+      const difference = now.getTime() - orderDate.getTime();
+      const hoursDifference = difference / (1000 * 3600);
+
+      if (hoursDifference < 24) {
+        setOrderId(parsedOrder.orderId);
+        QRCode.toDataURL(parsedOrder.orderId).then(setQrImage);
+      }
+    }
+  }, []);
+
   const confirmRefresh = () => {
     useEffect(() => {
       const unloadCallback = (event: {
@@ -81,6 +97,8 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       QRCode.toDataURL(orderId).then(setQrImage);
       setOrderId(orderId);
+      const orderData = { orderId, date: new Date().toISOString() };
+      localStorage.setItem("order", JSON.stringify(orderData));
     } catch (error) {
       console.error("Error generating QR code: ", error);
     }
@@ -114,6 +132,7 @@ export const useOrder = () => {
   }
   return context;
 };
+
 export interface OrderItem {
   _id: string;
   quantity: number;

@@ -12,9 +12,9 @@ export default function Searchbar({ onSearch }: SearchbarProps) {
   };
 
   return (
-    <div className="flex-grow flex items-center justify-center order-1">
-      <div className="relative w-full max-w-lg mx-5">
-        <div className="absolute inset-y-0 left-0 flex items-center pl-3">
+    <div className="flex-grow flex items-center justify-center order-1 sm:mr-0 mr-5">
+      <div className="relative w-full max-w-2xl mx-5">
+        <div className="absolute inset-y-0 flex items-center sm:pl-3 pl-0">
           {!isSearchOpen && (
             <svg
               className="sm:w-4 sm:h-4 w-7 h-7 text-gray-400 cursor-pointer hover:pointer "
