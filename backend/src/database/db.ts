@@ -9,4 +9,5 @@ const connectMongoDb = async (mongodbUrl: string) => {
   }
 };
 
-export const db = { connectMongoDb };
+const db = { connectMongoDb };
+export default db;

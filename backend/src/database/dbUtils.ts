@@ -64,11 +64,32 @@ const placeOrder = async (
     throw e;
   }
 };
-
-export const dbUtil = {
+const updateManyItemQuantity = async (updationItems: Item_t[]) => {
+  for (let [idx, iterItem] of updationItems.entries()) {
+    if (iterItem.id == null)
+      throw new Error(
+        "The the attribute 'id' is not present in the sent data at index " + idx
+      );
+    if (iterItem.availableQuantity == null && iterItem.price == null)
+      throw new Error(
+        "Either 'price' or 'availableQuantity' is required at index " + idx
+      );
+    const filter = { _id: iterItem.id };
+    const { id, ...setter } = iterItem;
+    try {
+      await Items.updateOne(filter, setter);
+    } catch (e) {
+      throw new Error("Invalid item at index " + idx + " " + e);
+    }
+  }
+};
+const dbUtil = {
   getItem,
   getAllItems,
   updateItemQuantity,
   placeOrder,
   getAllOrders,
+  updateManyItemQuantity,
 };
+
+export default dbUtil;

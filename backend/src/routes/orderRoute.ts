@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { dbUtil } from "../database/dbUtils";
 import { Orders_t, OrderedItem_t } from "../types/orders";
+import dbUtil from "../database/dbUtils";
 import mongoose from "mongoose";
 const router = Router();
 
@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
     if (e instanceof Error)
       res
         .status(500)
-        .send({ succes: false, msg: "Could'nt place Order", error: e.message });
+        .send({ succes: false, msg: "Couldn't place Order", error: e.message });
   }
 });
 

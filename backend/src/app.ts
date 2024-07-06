@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 const app = express();
-import { db } from "./database/db";
+import db from "./database/db";
 import cors from "cors";
 //route
 import itemRouter from "./routes/ItemRoute";
