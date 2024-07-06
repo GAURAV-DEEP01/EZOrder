@@ -1,7 +1,7 @@
 import axios from "axios";
 import { BACKEND_URL } from "../App";
-import logo from "../assets/logo.svg";
 import { useEffect, useState } from "react";
+import { Navbar } from "../components/AdminNavbar";
 interface Item {
   _id: string;
   id: string;
@@ -81,19 +81,7 @@ export default function Admin() {
   }
   return (
     <div>
-      <nav className="bg-zinc-900 border-gray-700 bg-opacity-45 backdrop-blur-md sticky top-0 left-0 w-full z-50">
-        <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
-          <a
-            href="/"
-            className="flex items-center space-x-3 rtl:space-x-reverse"
-          >
-            <img src={logo} className="h-10" alt="EZOrder Logo" />
-            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white md:block hidden">
-              EZOrder
-            </span>
-          </a>
-        </div>
-      </nav>
+      <Navbar />
       <div className="justify-center space-y-6 w-screen max-w-5xl mx-auto">
         <button
           className={
