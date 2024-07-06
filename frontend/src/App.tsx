@@ -10,42 +10,47 @@ import "./App.css";
 import { QrPage } from "./pages/QrPage";
 import { ScanQr } from "./pages/ScanQr";
 import { Kitchen } from "./pages/Kitchen";
+import { OrderProvider } from "./contexts/OrderContext";
+
+export const BACKEND_URL = "http://localhost:9000";
 
 const App: React.FC = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Order />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/qr" element={<QrPage />} />
-        <Route path="/admin/login" element={<Login />} />
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <Admin />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/qr"
-          element={
-            <ProtectedRoute>
-              <ScanQr />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/admin/kitchen"
-          element={
-            <ProtectedRoute>
-              <Kitchen />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="/*" element={<Error404 />} />
-      </Routes>
-    </BrowserRouter>
+    <OrderProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Order />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/qr" element={<QrPage />} />
+          <Route path="/admin/login" element={<Login />} />
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/qr"
+            element={
+              <ProtectedRoute>
+                <ScanQr />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/kitchen"
+            element={
+              <ProtectedRoute>
+                <Kitchen />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/*" element={<Error404 />} />
+        </Routes>
+      </BrowserRouter>
+    </OrderProvider>
   );
 };
 
