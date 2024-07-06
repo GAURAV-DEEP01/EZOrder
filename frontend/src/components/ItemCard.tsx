@@ -1,4 +1,5 @@
-import { Item, OrderItem } from "../pages/Order";
+import { OrderItem } from "../contexts/OrderContext";
+import { Item } from "../pages/Order";
 
 export interface ItemCardProps {
   item: Item;

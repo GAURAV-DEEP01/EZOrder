@@ -2,10 +2,19 @@ import { Navbar } from "../components/Navbar";
 import { useOrder } from "../contexts/OrderContext";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export const Cart = () => {
-  const { currentOrder, items, updateQuantity, removeItem, clearOrder } =
-    useOrder();
+  const {
+    currentOrder,
+    items,
+    updateQuantity,
+    removeItem,
+    clearOrder,
+    generateQr,
+    confirmRefresh,
+  } = useOrder();
+  const navigate = useNavigate();
 
   const orderedItems = currentOrder.map((orderItem) => {
     const item = items.find((item) => item._id === orderItem._id);
@@ -18,22 +27,35 @@ export const Cart = () => {
   );
 
   const handlePlaceOrder = async () => {
+    if (currentOrder.length <= 0) {
+      return alert("Add some items to place an order");
+    }
+    const orderData = currentOrder.map((orderItem) => ({
+      id: orderItem._id,
+      quantity: orderItem.quantity,
+    }));
+
     try {
-      const response = await axios.post(`${BACKEND_URL}/orders`, {
-        items: currentOrder,
-      });
-      console.log("Order placed successfully:", response.data);
-      clearOrder();
+      const response = await axios.post(`${BACKEND_URL}/orders`, orderData);
+      if (response.data.success) {
+        const id = response.data.orderId;
+        generateQr(id);
+        clearOrder();
+        navigate("/qr");
+      } else {
+        throw response.data.msg;
+      }
     } catch (error) {
-      console.error("Error placing order:", error);
+      alert("Error placing an order\nTry again later");
+      console.error("Error placing order : ", error);
     }
   };
-
+  confirmRefresh();
   return (
     <div>
       <Navbar displaySearch={false} />
       <div className="mt-20 max-w-5xl mx-auto p-4">
-        <div className=" flex justify-between mb-5">
+        <div className="flex justify-between mb-5">
           <h2 className="text-2xl font-semibold mb-4">Ordered Items</h2>
           <button
             onClick={clearOrder}

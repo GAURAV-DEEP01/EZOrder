@@ -15,7 +15,14 @@ export interface Item {
 }
 
 export const Order = () => {
-  const { items, setItems, currentOrder, addItem, updateQuantity } = useOrder();
+  const {
+    items,
+    setItems,
+    currentOrder,
+    addItem,
+    updateQuantity,
+    confirmRefresh,
+  } = useOrder();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [zeroQuantityItems, setZeroQuantityItems] = useState<Item[]>([]);
@@ -62,6 +69,8 @@ export const Order = () => {
   const filteredItems = items.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  confirmRefresh();
 
   return (
     <div>

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import Searchbar from "./Searchbar";
+import { useOrder } from "../contexts/OrderContext";
 
 interface NavbarProps {
   displaySearch: boolean;
@@ -8,6 +9,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ displaySearch, onSearch }: NavbarProps) {
+  const { currentOrder } = useOrder();
   return (
     <nav className="bg-zinc-900 border-gray-700 fixed top-0 left-0 w-full z-50">
       <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
@@ -39,6 +41,17 @@ export function Navbar({ displaySearch, onSearch }: NavbarProps) {
                   strokeLinejoin="round"
                 />
               </svg>
+              {currentOrder.length > 0 ? (
+                <svg
+                  className=" absolute top-5 right-14"
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="24px"
+                  viewBox="0 -960 960 960"
+                  width="24px"
+                  fill="#FF0000">
+                  <path d="M480.19-222Q374-222 298-297.81t-76-182Q222-586 297.81-662t182-76Q586-738 662-662.19t76 182Q738-374 662.19-298t-182 76Z" />
+                </svg>
+              ) : null}
               <span className="sr-only">Cart</span>
             </Link>
           </div>

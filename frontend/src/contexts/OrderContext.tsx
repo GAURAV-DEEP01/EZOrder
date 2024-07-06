@@ -1,4 +1,5 @@
-import { createContext, useContext, useState } from "react";
+import QRCode from "qrcode";
+import { createContext, useContext, useEffect, useState } from "react";
 import { Item } from "../pages/Order";
 
 interface OrderContextProps {
@@ -10,6 +11,10 @@ interface OrderContextProps {
   updateQuantity: (itemId: string, quantity: number) => void;
   removeItem: (itemId: string) => void;
   clearOrder: () => void;
+  generateQr: (orderId: string) => void;
+  qrImage: string | undefined;
+  orderId: string;
+  confirmRefresh: () => void;
 }
 
 const OrderContext = createContext<OrderContextProps | undefined>(undefined);
@@ -17,6 +22,24 @@ const OrderContext = createContext<OrderContextProps | undefined>(undefined);
 export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [items, setItems] = useState<Item[]>([]);
   const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
+  const [qrImage, setQrImage] = useState<string>();
+  const [orderId, setOrderId] = useState<string>("");
+
+  const confirmRefresh = () => {
+    useEffect(() => {
+      const unloadCallback = (event: {
+        preventDefault: () => void;
+        returnValue: string;
+      }) => {
+        event.preventDefault();
+        event.returnValue = "";
+        return "";
+      };
+
+      window.addEventListener("beforeunload", unloadCallback);
+      return () => window.removeEventListener("beforeunload", unloadCallback);
+    }, []);
+  };
 
   const addItem = (item: Item) => {
     setCurrentOrder((prevOrder) => {
@@ -54,6 +77,15 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentOrder([]);
   };
 
+  const generateQr = (orderId: string) => {
+    try {
+      QRCode.toDataURL(orderId).then(setQrImage);
+      setOrderId(orderId);
+    } catch (error) {
+      console.error("Error generating QR code: ", error);
+    }
+  };
+
   return (
     <OrderContext.Provider
       value={{
@@ -65,6 +97,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         updateQuantity,
         removeItem,
         clearOrder,
+        generateQr,
+        qrImage,
+        orderId,
+        confirmRefresh,
       }}>
       {children}
     </OrderContext.Provider>
@@ -78,8 +114,7 @@ export const useOrder = () => {
   }
   return context;
 };
-
-interface OrderItem {
+export interface OrderItem {
   _id: string;
   quantity: number;
 }
