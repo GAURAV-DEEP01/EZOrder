@@ -1,28 +1,178 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Navbar } from "../components/Navbar";
+import axios from "axios";
+import { BACKEND_URL } from "../App";
+import logo from "../assets/logo.svg";
+import { useEffect, useState } from "react";
+interface Item {
+  _id: string;
+  id: string;
+  name: string;
+  price: number;
+  availableQuantity: number;
+  soldQuantity: number;
+  image: string;
+}
 
-const Admin: React.FC = () => {
-  const navigate = useNavigate();
+export default function Admin() {
+  const [items, setItems] = useState<Item[]>([]);
+  const [btnDisabled, setBtnDisabled] = useState(true);
 
+  //fetch all items
+  useEffect(() => {
+    (async () => {
+      const res = await axios.get<{
+        success: boolean;
+        msg: string;
+        data: Item[];
+      }>(BACKEND_URL + "/items/");
+      const fetchedItems = res.data.data;
+      fetchedItems?.forEach((item) => {
+        item.id = item._id;
+      });
+      setItems(fetchedItems);
+    })();
+  }, []);
+
+  //confirm refresh
+  useEffect(() => {
+    const unloadCallback = (event: {
+      preventDefault: () => void;
+      returnValue: string;
+    }) => {
+      event.preventDefault();
+      event.returnValue = "";
+      return "";
+    };
+
+    window.addEventListener("beforeunload", unloadCallback);
+    return () => window.removeEventListener("beforeunload", unloadCallback);
+  }, []);
+
+  function handleItemChange(
+    itemId: string,
+    availableQuantity: number,
+    price: number
+  ) {
+    const updatedItems = items.map((item) => {
+      if (item.id === itemId) {
+        return { ...item, availableQuantity, price };
+      }
+      return item;
+    });
+    setItems(updatedItems);
+    setBtnDisabled(false);
+  }
+
+  function handleUpdate() {
+    axios
+      .patch(BACKEND_URL + "/items", items)
+      .then((res) => {
+        if (res.data.success) {
+          window.alert("✅Update Successful!");
+          setBtnDisabled(true);
+        } else {
+          window.alert("❌Update Failed!");
+          console.error(res.data.msg);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        window.alert("❌Update Failed!");
+      });
+  }
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md text-black">
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Page</h2>
-        <p className="">Welcome to the admin page!</p>
-        list of food items here-
-        <br />
-        <br />
-        <div className="flex justify-between ">
-          <button className="border" onClick={() => navigate("/admin/qr")}>
-            Qr
-          </button>
-          <button className="border" onClick={() => alert("edit items")}>
-            Edit
-          </button>
+    <div>
+      <nav className="bg-zinc-900 border-gray-700 bg-opacity-45 backdrop-blur-md sticky top-0 left-0 w-full z-50">
+        <div className="max-w-screen-xl flex items-center justify-between mx-auto p-4">
+          <a
+            href="/"
+            className="flex items-center space-x-3 rtl:space-x-reverse"
+          >
+            <img src={logo} className="h-10" alt="EZOrder Logo" />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap text-white md:block hidden">
+              EZOrder
+            </span>
+          </a>
+        </div>
+      </nav>
+      <div className="justify-center space-y-6 w-screen max-w-5xl mx-auto">
+        <button
+          className={
+            "hover:bg-green-700 mx-5 my-3 text-white font-bold py-2 px-4 rounded" +
+            (btnDisabled
+              ? " bg-green-700 cursor-not-allowed"
+              : " bg-green-500 cursor-pointer")
+          }
+          onClick={handleUpdate}
+          disabled={btnDisabled}
+        >
+          Save
+        </button>
+        {items.map((item) => (
+          <ItemCard
+            key={item.id}
+            item={item}
+            handleItemChange={handleItemChange}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const ItemCard = function ({
+  item,
+  handleItemChange,
+}: {
+  item: Item;
+  handleItemChange: (
+    itemId: string,
+    availableQuantity: number,
+    price: number
+  ) => void;
+}) {
+  return (
+    <div className="relative flex items-center border p-4 mx-5 rounded-lg bg-white shadow-md text-black">
+      <img
+        src={
+          "https://upload.wikimedia.org/wikipedia/commons/c/cf/Samosa-and-Chatni.jpg"
+        }
+        alt={item.name}
+        className="w-24 h-24 object-cover rounded-lg mr-4 hidden sm:block"
+      />
+      <div className="flex-grow text-start mt-0">
+        <h2 className="text-lg font-semibold mb-2">{item.name}</h2>
+      </div>
+      <div className="grid gap-1 justify-items-end">
+        <div className="flex items-center space-x-2">
+          <span>Available Quantity:</span>
+          <input
+            type="number"
+            min="0"
+            value={item.availableQuantity}
+            onChange={(e) =>
+              handleItemChange!(item._id, parseInt(e.target.value), item.price)
+            }
+            className="w-16 p-2 border text-black rounded-lg text-center"
+          />
+        </div>
+        <div className="flex items-center space-x-2">
+          <span>Price: ₹</span>
+          <input
+            type="number"
+            min="0"
+            value={item.price}
+            onChange={(e) =>
+              handleItemChange!(
+                item._id,
+                item.availableQuantity,
+                parseInt(e.target.value)
+              )
+            }
+            className="w-16 p-2 border text-black rounded-lg text-center"
+          />
         </div>
       </div>
     </div>
   );
 };
-
-export default Admin;
