@@ -3,6 +3,7 @@ import Items from "../models/itemModel";
 import Orders from "../models/orderModel";
 import Item_t from "../types/items";
 import { Orders_t, OrderedItem_t } from "../types/orders";
+import AppError, { AppErrorType } from "../types/AppError";
 
 const getItem = async (param: Item_t): Promise<Item_t> => {
   try {
@@ -41,9 +42,13 @@ const updateItemQuantity = async (
 
 const getAllOrders = async (): Promise<Orders_t[]> => {
   try {
-    const order: Orders_t[] = await Orders.find().select("-__v  -items._id");
-    if (order.length == 0) throw new Error("No orders available");
-    return order;
+    const orders: Orders_t[] = await Orders.find()
+      .populate({
+        path: "items.id",
+        select: "name price -_id",
+      })
+      .select("-__v -items._id -items.id");
+    return orders;
   } catch (e) {
     throw new Error("Unable to fetch orders" + e);
   }
@@ -64,7 +69,9 @@ const placeOrder = async (
     throw e;
   }
 };
-const updateManyItemQuantity = async (updationItems: Item_t[]) => {
+const updateManyItemQuantity = async (
+  updationItems: Item_t[]
+): Promise<void> => {
   for (let [idx, iterItem] of updationItems.entries()) {
     if (iterItem.id == null)
       throw new Error(
@@ -75,7 +82,7 @@ const updateManyItemQuantity = async (updationItems: Item_t[]) => {
         "Either 'price' or 'availableQuantity' is required at index " + idx
       );
     const filter = { _id: iterItem.id };
-    const { id, ...setter } = iterItem;
+    const { id, name, soldQuantity, image, ...setter } = iterItem;
     try {
       await Items.updateOne(filter, setter);
     } catch (e) {
@@ -83,13 +90,55 @@ const updateManyItemQuantity = async (updationItems: Item_t[]) => {
     }
   }
 };
+
+const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
+  try {
+    const order: Orders_t | null = await Orders.findOne({
+      _id: requestOrder.id,
+    })
+      .populate({
+        path: "items.id",
+        select: "name price -_id",
+      })
+      .select("-__v -items._id ");
+    if (order == null) throw new Error("Item couldn't be found");
+
+    if (order.status != "ordered")
+      throw new AppError(
+        AppErrorType.InvalidOrderState,
+        `Order Status '${order.status}', but expected 'ordered'`,
+        400
+      );
+    const now: Date = new Date();
+    const orderDate: Date = new Date(order.date);
+    if (now.getTime() - orderDate.getTime() > 1000 * 60 * 60 * 24) {
+      const ExpirationDateOfOrder: Date = new Date(orderDate.getTime() + 1);
+      throw new AppError(
+        AppErrorType.TokenExpired,
+        "Order token has expired on " +
+          ExpirationDateOfOrder +
+          ". Please request a new one",
+        401
+      );
+    }
+    order.status = "current";
+    await order.save();
+    return order;
+  } catch (e) {
+    throw e;
+  }
+};
+
 const dbUtil = {
+  // items
   getItem,
   getAllItems,
   updateItemQuantity,
-  placeOrder,
-  getAllOrders,
   updateManyItemQuantity,
+  // orders
+  placeOrder,
+  getOrder,
+  getAllOrders,
 };
 
 export default dbUtil;

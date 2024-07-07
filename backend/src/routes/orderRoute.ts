@@ -2,6 +2,7 @@ import { Router } from "express";
 import { Orders_t, OrderedItem_t } from "../types/orders";
 import dbUtil from "../database/dbUtils";
 import mongoose from "mongoose";
+import AppError from "../types/AppError";
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -19,6 +20,25 @@ router.get("/", async (req, res) => {
       });
   }
 });
+router.get("/:id", async (req, res) => {
+  try {
+    const order: Orders_t = await dbUtil.getOrder(req.params as Orders_t);
+    res.status(200).send({ success: true, msg: "Order found", data: order });
+  } catch (e) {
+    if (e instanceof AppError)
+      res.status(e.statusCode).send({
+        success: false,
+        msg: e.type,
+        error: e.message,
+      });
+    else if (e instanceof Error)
+      res.status(500).send({
+        success: false,
+        msg: "Unable to retrive Order",
+        error: e.message,
+      });
+  }
+});
 
 router.post("/", async (req, res) => {
   try {
@@ -32,9 +52,11 @@ router.post("/", async (req, res) => {
     });
   } catch (e) {
     if (e instanceof Error)
-      res
-        .status(500)
-        .send({ succes: false, msg: "Couldn't place Order", error: e.message });
+      res.status(500).send({
+        success: false,
+        msg: "Couldn't place Order",
+        error: e.message,
+      });
   }
 });
 
