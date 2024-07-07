@@ -38,7 +38,7 @@ export function Navbar({ displaySearch, onSearch }: NavbarProps) {
             </div>
             <Link
               to={"/cart"}
-              className="text-gray-400 hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5">
+              className="text-gray-400 hover:bg-zinc-800 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5 relative">
               <svg
                 width="30"
                 height="30"
@@ -55,7 +55,7 @@ export function Navbar({ displaySearch, onSearch }: NavbarProps) {
               </svg>
               {currentOrder.length > 0 ? (
                 <svg
-                  className=" absolute top-5 right-4"
+                  className=" absolute top-0 right-0"
                   xmlns="http://www.w3.org/2000/svg"
                   height="24px"
                   viewBox="0 -960 960 960"
