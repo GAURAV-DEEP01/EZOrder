@@ -76,10 +76,20 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
 
   const updateQuantity = (itemId: string, quantity: number) => {
     setCurrentOrder((prevOrder) => {
-      const updatedOrder = prevOrder.map((orderItem) =>
-        orderItem._id === itemId ? { ...orderItem, quantity } : orderItem
+      const existingItem = prevOrder.find(
+        (orderItem) => orderItem._id === itemId
       );
-      return updatedOrder.filter((orderItem) => orderItem.quantity > 0);
+      if (existingItem) {
+        return prevOrder.map((orderItem) =>
+          orderItem._id === itemId
+            ? { ...orderItem, quantity: quantity }
+            : orderItem
+        ).filter((orderItem) => orderItem.quantity > 0);
+      } else {
+        return [...prevOrder, { _id: itemId, quantity: 1 }].filter(
+          (orderItem) => orderItem.quantity > 0
+        );
+      }
     });
   };
 
