@@ -4,10 +4,11 @@ import { BACKEND_URL } from "../App";
 import { Navbar } from "../components/AdminNavbar";
 import expandIcon from "../assets/expand-button.png"
 interface OrderedItem {
-  id: string;
+  id: {
+    name: string;
+    price: number;
+  };
   quantity: number;
-  name: string;
-  price: number;
 }
 
 interface Order {
@@ -20,40 +21,43 @@ interface Order {
 
 export const Kitchen = () => {
   const [orders, setOrders] = useState<Order[] | null>(null);
+
+  const fetchOrders = async () => {
+    const response = await axios.get<{
+      success: boolean;
+      msg: string;
+      data: Order[];
+    }>(BACKEND_URL + "/orders");
+    const data = response.data.data.filter(
+      (order) => order.status == "confirmed"
+    );
+    console.log(data);
+
+    // const data: Order[] = [
+    //   {
+    //     _id: "66881f1c108a22aa09e4080b",
+    //     orderNo: 101,
+    //     items: [
+    //       {
+    //         id: "66881f1c108a22aa09e4080a",
+    //         quantity: 2,
+    //         name: "Veggie Burger",
+    //         price: 100,
+    //       },
+    //       {
+    //         id: "66881f1c108a22aa09e40809",
+    //         quantity: 5,
+    //         name: "Veggie Noodles",
+    //         price: 100,
+    //       },
+    //     ],
+    //     status: "ordered",
+    //     date: "2024-07-01T10:00:00Z",
+    //   },
+    // ];
+    setOrders(data);
+  };
   useEffect(() => {
-    const fetchOrders = async () => {
-      // const response = await axios.get<{
-      //   success: boolean;
-      //   msg: string;
-      //   data: Order[];
-      // }>(BACKEND_URL + "/orders");
-      // const data = response.data.data;
-      // console.log(data);
-      
-      const data: Order[] = [
-        {
-          _id: "66881f1c108a22aa09e4080b",
-          orderNo: 101,
-          items: [
-            {
-              id: "66881f1c108a22aa09e4080a",
-              quantity: 2,
-              name: "Veggie Burger",
-              price: 100,
-            },
-            {
-              id: "66881f1c108a22aa09e40809",
-              quantity: 5,
-              name: "Veggie Noodles",
-              price: 100,
-            },
-          ],
-          status: "ordered",
-          date: "2024-07-01T10:00:00Z",
-        },
-      ];
-      setOrders(data);
-    };
     fetchOrders();
   },[]);
   return (
@@ -66,21 +70,33 @@ export const Kitchen = () => {
           : orders.length == 0
           ? "No orders available"
           : orders.map((order) => (
-              <KitchenOrder key={order._id} order={order} />
+              <KitchenOrder key={order._id} order={order} reFetchOrder={fetchOrders}/>
             ))}
       </div>
     </div>
   );
 };
 
-const KitchenOrder = ({ order }: { order: Order }) => {
+const KitchenOrder = ({
+  order,
+  reFetchOrder,
+}: {
+  order: Order;
+  reFetchOrder: () => void;
+}) => {
   const [toggle, setToggle] = useState(false);
   function handleOrderDone() {
-    try{
+    try {
       axios.patch(BACKEND_URL + "/orders/" + order._id, {
         status: "finished",
-      });
-    }catch(e){
+      }).then((response) => {
+        if (!response.data.success) {
+          console.error(response.data.msg);
+          window.alert("❌Update Failed");
+        }
+        reFetchOrder();
+      })
+    } catch (e) {
       console.log(e);
     }
   }
@@ -90,14 +106,20 @@ const KitchenOrder = ({ order }: { order: Order }) => {
       <div className="flex items-center px-4 py-2">
         <h3 className="font-bold mr-auto">Order No: {order.orderNo}</h3>
         <div>
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2">
+          <button
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
+            onClick={handleOrderDone}
+          >
             DONE
           </button>
           <button
-            className={"bg-slate-200 text-white inline-block p-2 rounded-md shadow-lg hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-gray-500 "+ (!toggle ? " -rotate-90" : "")}
+            className={
+              "bg-slate-200 text-white inline-block p-2 rounded-md shadow-lg hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-gray-500 " +
+              (!toggle ? " -rotate-90" : "")
+            }
             onClick={() => setToggle(!toggle)}
           >
-            <img src={expandIcon} className="h-3 aspect-square"/>
+            <img src={expandIcon} className="h-3 aspect-square" />
           </button>
         </div>
       </div>
@@ -113,8 +135,8 @@ const KitchenOrder = ({ order }: { order: Order }) => {
             </thead>
             <tbody>
               {order.items.map((item) => (
-                <tr key={item.id} className="text-center">
-                  <td className="border px-4 py-2">{item.name}</td>
+                <tr key={item.id.name} className="text-center">
+                  <td className="border px-4 py-2">{item.id.name}</td>
                   <td className="border px-4 py-2">{item.quantity}</td>
                   <td className="border px-4 py-2">
                     <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700">
