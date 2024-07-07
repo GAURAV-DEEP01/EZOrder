@@ -20,12 +20,13 @@ app.use(
 app.use(express.json());
 
 // Routes
-app.get("/", (req, res) => {
-  res.status(201).send("<h1>BE init Setup");
-});
 
 app.use("/items", itemRouter);
 
 app.use("/orders", orderRouter);
+
+app.all("*", (req, res) => {
+  res.status(404).send({ success: false, msg: "Invalid route" });
+});
 
 export default app;
