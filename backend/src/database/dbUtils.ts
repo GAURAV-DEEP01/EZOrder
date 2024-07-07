@@ -129,6 +129,25 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
   }
 };
 
+
+const updateOrder = async (
+  params: Orders_t,
+  orderUpdateReq: Orders_t
+): Promise<void> => {
+  if (orderUpdateReq.status == undefined)
+    throw new Error("Status is required to update order");
+
+  if (!["current", "ordered", "confirmed", "finished"].includes(orderUpdateReq.status))
+    throw new Error("Invalid status, status must be one of: current, ordered, confirmed, finished");
+
+  try {
+    const { id, ...setter } = orderUpdateReq;
+    let a = await Orders.findByIdAndUpdate(params.id, setter);
+  } catch (e) {
+    throw new Error("Unable to update order. " + e);
+  }
+};
+
 const dbUtil = {
   // items
   getItem,
@@ -139,6 +158,7 @@ const dbUtil = {
   placeOrder,
   getOrder,
   getAllOrders,
+  updateOrder,
 };
 
 export default dbUtil;

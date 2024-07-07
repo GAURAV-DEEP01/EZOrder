@@ -60,4 +60,20 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+router.patch("/:id", async (req, res) => {
+  try {
+    await dbUtil.updateOrder(req.params as Orders_t, req.body as Orders_t);
+    res.status(200).send({ success: true, msg: "Update Complete" });
+  } catch (e) {
+    if (e instanceof Error)
+      res.status(500).send({
+        success: false,
+        msg: "Updation failed",
+        error: e.message,
+      });
+  }
+});
+
+
 export default router;
