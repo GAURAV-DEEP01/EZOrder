@@ -13,9 +13,10 @@ export const ScanQr = () => {
 
   useEffect(() => {
     if (!scannerRef.current) return;
-
+    let lastResult:null|string = null;
     scanner = new QrScanner(scannerRef.current, (result) => {
-      if (regex.test(result)) {
+      if (regex.test(result) && result !== lastResult) {
+        lastResult = result;
         scanner.stop();
         setCurntOrder("loading");
         // fetch order from backend
@@ -33,7 +34,7 @@ export const ScanQr = () => {
           .catch((e) => {
             setCurntOrder(null);
             window.alert("Invalid Order");
-            console.log(e);
+            console.error(e);
           });
       }
       console.log(result);
