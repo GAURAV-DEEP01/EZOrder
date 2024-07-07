@@ -103,7 +103,7 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
       .select("-__v -items._id ");
     if (order == null) throw new Error("Item couldn't be found");
 
-    if (order.status != "ordered")
+    if (order.status != "ordered" && order.status != "current")
       throw new AppError(
         AppErrorType.InvalidOrderState,
         `Order Status '${order.status}', but expected 'ordered'`,
@@ -142,7 +142,8 @@ const updateOrder = async (
 
   try {
     const { id, ...setter } = orderUpdateReq;
-    let a = await Orders.findByIdAndUpdate(params.id, setter);
+    const order = await Orders.findById(params.id);
+    await order?.set(setter).save();
   } catch (e) {
     throw new Error("Unable to update order. " + e);
   }

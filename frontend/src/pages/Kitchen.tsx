@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
 import { Navbar } from "../components/AdminNavbar";
-import expandIcon from "../assets/expand-button.png"
+import expandIcon from "../assets/expand-button.png";
+import { io } from "socket.io-client";
 interface OrderedItem {
   id: {
     name: string;
@@ -23,54 +24,56 @@ export const Kitchen = () => {
   const [orders, setOrders] = useState<Order[] | null>(null);
 
   const fetchOrders = async () => {
-    const response = await axios.get<{
-      success: boolean;
-      msg: string;
-      data: Order[];
-    }>(BACKEND_URL + "/orders");
-    const data = response.data.data.filter(
-      (order) => order.status == "confirmed"
-    );
-    console.log(data);
-
-    // const data: Order[] = [
-    //   {
-    //     _id: "66881f1c108a22aa09e4080b",
-    //     orderNo: 101,
-    //     items: [
-    //       {
-    //         id: "66881f1c108a22aa09e4080a",
-    //         quantity: 2,
-    //         name: "Veggie Burger",
-    //         price: 100,
-    //       },
-    //       {
-    //         id: "66881f1c108a22aa09e40809",
-    //         quantity: 5,
-    //         name: "Veggie Noodles",
-    //         price: 100,
-    //       },
-    //     ],
-    //     status: "ordered",
-    //     date: "2024-07-01T10:00:00Z",
-    //   },
-    // ];
-    setOrders(data);
+    try{
+      const response = await axios.get<{
+        success: boolean;
+        msg: string;
+        data: Order[];
+      }>(BACKEND_URL + "/orders");
+      const data = response.data.data.filter(
+        (order) =>
+          order.status == "confirmed" &&
+          order.date.slice(0, 10) == new Date().toISOString().slice(0, 10)
+      );
+  
+      setOrders(data);
+    }catch(e){
+      console.error(e);
+      window.alert("Unable to fetch orders");
+      setOrders([]);
+    }
   };
   useEffect(() => {
     fetchOrders();
-  },[]);
+    const socket = io(BACKEND_URL, { path: "/kitchen/listen" });
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+    socket.on("update", (data) => {
+      setOrders(
+        (data as Array<Order>).filter(
+          (order) =>
+            order.status == "confirmed" &&
+            order.date.slice(0, 10) == new Date().toISOString().slice(0, 10)
+        )
+      );
+    });
+  }, []);
   return (
     <div>
       <Navbar />
       <div className="max-w-5xl mx-auto">
-      <h1>Orders</h1>
+        <h1>Orders</h1>
         {!orders
           ? "Loading..."
           : orders.length == 0
           ? "No orders available"
           : orders.map((order) => (
-              <KitchenOrder key={order._id} order={order} reFetchOrder={fetchOrders}/>
+              <KitchenOrder
+                key={order._id}
+                order={order}
+                reFetchOrder={fetchOrders}
+              />
             ))}
       </div>
     </div>
@@ -87,17 +90,20 @@ const KitchenOrder = ({
   const [toggle, setToggle] = useState(false);
   function handleOrderDone() {
     try {
-      axios.patch(BACKEND_URL + "/orders/" + order._id, {
-        status: "finished",
-      }).then((response) => {
-        if (!response.data.success) {
-          console.error(response.data.msg);
-          window.alert("❌Update Failed");
-        }
-        reFetchOrder();
-      })
+      axios
+        .patch(BACKEND_URL + "/orders/" + order._id, {
+          status: "finished",
+        })
+        .then((response) => {
+          if (!response.data.success) {
+            console.error(response.data.msg);
+            window.alert("❌Update Failed");
+          }
+          reFetchOrder();
+        });
     } catch (e) {
       console.log(e);
+      reFetchOrder();
     }
   }
 

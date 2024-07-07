@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const OrderSchema = new mongoose.Schema({
+export const OrderSchema = new mongoose.Schema({
   orderNo: { type: Number, default: 99 },
   items: [
     {
