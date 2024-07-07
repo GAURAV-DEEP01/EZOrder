@@ -116,8 +116,8 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
       throw new AppError(
         AppErrorType.TokenExpired,
         "Order token has expired on " +
-          ExpirationDateOfOrder +
-          ". Please request a new one",
+        ExpirationDateOfOrder +
+        ". Please request a new one",
         401
       );
     }
@@ -135,17 +135,34 @@ const updateOrder = async (
   orderUpdateReq: Orders_t
 ): Promise<void> => {
   if (orderUpdateReq.status == undefined)
-    throw new Error("Status is required to update order");
+    throw new AppError(AppErrorType.InvalidOrderState, "Status is required", 400);
 
   if (!["current", "ordered", "confirmed", "finished"].includes(orderUpdateReq.status))
-    throw new Error("Invalid status, status must be one of: current, ordered, confirmed, finished");
+    throw new AppError(AppErrorType.InvalidOrderState, "Invalid status, status must be one of: current, ordered, confirmed, finished", 400);
 
   try {
     const { id, ...setter } = orderUpdateReq;
-    const order = await Orders.findById(params.id);
-    await order?.set(setter).save();
+    let order: any = await Orders.findById(params.id);
+    if ((order.status == "finished" || order.status == "confirmed") && setter.status == "current") throw new AppError(AppErrorType.InvalidOrderState, "Order is already finished or confirmed", 400);
+    order = await order?.set(setter).save();
   } catch (e) {
-    throw new Error("Unable to update order. " + e);
+    throw e;
+  }
+};
+
+const getCurrentOrder = async (): Promise<Orders_t | null> => {
+  try {
+    const order: Orders_t | null = await Orders.findOne({
+      status: "current",
+    })
+      .populate({
+        path: "items.id",
+        select: "name price -_id",
+      })
+      .select("-__v -items._id ");
+    return order;
+  } catch (e) {
+    throw e;
   }
 };
 
@@ -160,6 +177,7 @@ const dbUtil = {
   getOrder,
   getAllOrders,
   updateOrder,
+  getCurrentOrder,
 };
 
 export default dbUtil;

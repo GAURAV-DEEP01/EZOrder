@@ -4,6 +4,7 @@ import QrScanner from "qr-scanner";
 import { Navbar } from "../components/AdminNavbar";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
+import { io } from "socket.io-client";
 
 export const ScanQr = () => {
   const scannerRef = useRef(null);
@@ -13,7 +14,7 @@ export const ScanQr = () => {
 
   useEffect(() => {
     if (!scannerRef.current) return;
-    let lastResult:null|string = null;
+    let lastResult: null | string = null;
     scanner = new QrScanner(scannerRef.current, (result) => {
       if (regex.test(result) && result !== lastResult) {
         lastResult = result;
@@ -21,7 +22,7 @@ export const ScanQr = () => {
         setCurntOrder("loading");
         // fetch order from backend
         axios
-          .get(BACKEND_URL + "/orders/" + result)
+          .patch(BACKEND_URL + "/orders/" + result, { status: "current" })
           .then((response) => {
             if (response.data.success === false) {
               setCurntOrder(null);
@@ -29,7 +30,7 @@ export const ScanQr = () => {
               console.log(response.data.msg);
               return;
             }
-            setCurntOrder(response.data.data);
+            // setCurntOrder(response.data.data);
           })
           .catch((e) => {
             setCurntOrder(null);
@@ -42,6 +43,16 @@ export const ScanQr = () => {
     scanner.start();
   }, [scannerRef.current, curntOrder]);
 
+  useEffect(() => {
+    const socket = io(BACKEND_URL, { path: "/listen/curntOrder" });
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+    socket.on("update", (data) => {
+      console.log("Recieved data");
+      setCurntOrder(data);
+    });
+  }, []);
 
   const confirmOrder = () => {
     if (!curntOrder) return;
@@ -64,8 +75,31 @@ export const ScanQr = () => {
         console.error(e);
         setCurntOrder(null);
       });
+  };
 
-  }
+  const cancelOrder = () => {
+    if (!curntOrder) return;
+    axios
+      .patch(BACKEND_URL + "/orders/" + curntOrder._id, {
+        status: "finished",
+      })
+      .then((response) => {
+        if (response.data.success) {
+          window.alert("✅Order Cancelled");
+          setCurntOrder(null);
+        } else {
+          window.alert("❌Order cancel failed");
+          console.error(response.data.msg);
+          setCurntOrder(null);
+        }
+      })
+      .catch((e) => {
+        window.alert("❌Order cancel failed");
+        console.error(e);
+        setCurntOrder(null);
+      });
+  };
+
   return (
     <>
       <Navbar />
@@ -90,9 +124,9 @@ export const ScanQr = () => {
                 </tr>
               </thead>
               <tbody>
-                {curntOrder.items.map((item: any) => (
+                {curntOrder.items.map((item: any, index: number) => (
                   <tr
-                    key={item.itemId}
+                    key={index}
                     className="bg-gray-800 border-b border-gray-700"
                   >
                     <td className="px-4 py-2">{item.id.name}</td>
@@ -113,10 +147,16 @@ export const ScanQr = () => {
             </table>
 
             <button
-              onClick={()=>confirmOrder()}
+              onClick={() => confirmOrder()}
               className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
             >
               Confirm Order →
+            </button>
+            <button
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
+              onClick={() => cancelOrder()}
+            >
+              Cancel
             </button>
           </div>
         )}

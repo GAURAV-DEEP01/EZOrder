@@ -24,7 +24,7 @@ export const Kitchen = () => {
   const [orders, setOrders] = useState<Order[] | null>(null);
 
   const fetchOrders = async () => {
-    try{
+    try {
       const response = await axios.get<{
         success: boolean;
         msg: string;
@@ -35,9 +35,9 @@ export const Kitchen = () => {
           order.status == "confirmed" &&
           order.date.slice(0, 10) == new Date().toISOString().slice(0, 10)
       );
-  
+
       setOrders(data);
-    }catch(e){
+    } catch (e) {
       console.error(e);
       window.alert("Unable to fetch orders");
       setOrders([]);
@@ -45,7 +45,7 @@ export const Kitchen = () => {
   };
   useEffect(() => {
     fetchOrders();
-    const socket = io(BACKEND_URL, { path: "/kitchen/listen" });
+    const socket = io(BACKEND_URL, { path: "/listen/kitchen" });
     socket.on("connect", () => {
       console.log("connected");
     });
