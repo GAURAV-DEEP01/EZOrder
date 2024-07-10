@@ -8,7 +8,10 @@ import cors from "cors";
 import itemRouter from "./routes/ItemRoute";
 import orderRouter from "./routes/orderRoute";
 
-db.connectMongoDb(process.env.MONGODB_URL as string);
+// Connecting mongodb and then creating a websocket
+db.connectMongoDb(process.env.MONGODB_URL as string)
+  .then(() => db.wsInitializer())
+  .catch((e) => console.error("Failed to connect to MongoDB:", e));
 
 app.use(
   cors({

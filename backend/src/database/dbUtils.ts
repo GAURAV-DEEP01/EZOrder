@@ -69,6 +69,7 @@ const placeOrder = async (
     throw e;
   }
 };
+
 const updateManyItemQuantity = async (
   updationItems: Item_t[]
 ): Promise<void> => {
@@ -116,8 +117,8 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
       throw new AppError(
         AppErrorType.TokenExpired,
         "Order token has expired on " +
-        ExpirationDateOfOrder +
-        ". Please request a new one",
+          ExpirationDateOfOrder +
+          ". Please request a new one",
         401
       );
     }
@@ -129,21 +130,40 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
   }
 };
 
-
 const updateOrder = async (
   params: Orders_t,
   orderUpdateReq: Orders_t
 ): Promise<void> => {
   if (orderUpdateReq.status == undefined)
-    throw new AppError(AppErrorType.InvalidOrderState, "Status is required", 400);
+    throw new AppError(
+      AppErrorType.InvalidOrderState,
+      "Status is required",
+      400
+    );
 
-  if (!["current", "ordered", "confirmed", "finished"].includes(orderUpdateReq.status))
-    throw new AppError(AppErrorType.InvalidOrderState, "Invalid status, status must be one of: current, ordered, confirmed, finished", 400);
+  if (
+    !["current", "ordered", "confirmed", "finished"].includes(
+      orderUpdateReq.status
+    )
+  )
+    throw new AppError(
+      AppErrorType.InvalidOrderState,
+      "Invalid status, status must be one of: current, ordered, confirmed, finished",
+      400
+    );
 
   try {
     const { id, ...setter } = orderUpdateReq;
     let order: any = await Orders.findById(params.id);
-    if ((order.status == "finished" || order.status == "confirmed") && setter.status == "current") throw new AppError(AppErrorType.InvalidOrderState, "Order is already finished or confirmed", 400);
+    if (
+      (order.status == "finished" || order.status == "confirmed") &&
+      setter.status == "current"
+    )
+      throw new AppError(
+        AppErrorType.InvalidOrderState,
+        "Order is already finished or confirmed",
+        400
+      );
     order = await order?.set(setter).save();
   } catch (e) {
     throw e;
@@ -176,8 +196,8 @@ const dbUtil = {
   placeOrder,
   getOrder,
   getAllOrders,
-  updateOrder,
   getCurrentOrder,
+  updateOrder,
 };
 
 export default dbUtil;

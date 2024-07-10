@@ -2,7 +2,6 @@ import { Router } from "express";
 import { populateItems } from "../init/populateDb";
 import dbUtil from "../database/dbUtils";
 import Items_t from "../types/items";
-import { OrderedItem_t } from "../types/orders";
 const router = Router();
 
 router.get("/", async (req, res) => {
@@ -18,6 +17,7 @@ router.get("/", async (req, res) => {
       });
   }
 });
+
 router.patch("/", async (req, res) => {
   try {
     await dbUtil.updateManyItemQuantity(req.body as Items_t[]);
