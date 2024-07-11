@@ -12,7 +12,8 @@ import { ScanQr } from "./pages/ScanQr";
 import { Kitchen } from "./pages/Kitchen";
 import { OrderProvider } from "./contexts/OrderContext";
 
-export const BACKEND_URL = "http://localhost:9000";
+export const BACKEND_URL = "http://192.168.132.11:9000";
+// export const BACKEND_URL = "http://localhost:9000";
 
 const App: React.FC = () => {
   return (

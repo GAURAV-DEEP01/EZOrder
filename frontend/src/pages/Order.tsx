@@ -52,6 +52,7 @@ export const Order = () => {
         setZeroQuantityItems(zeroQtyItems);
       } catch (error) {
         console.error("Error fetching items:", error);
+        alert("cannot access Backend");
       }
     };
 

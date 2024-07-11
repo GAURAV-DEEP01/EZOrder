@@ -1,32 +1,56 @@
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import QrScanner from "qr-scanner";
 import { Navbar } from "../components/AdminNavbar";
 import axios from "axios";
 import { BACKEND_URL } from "../App";
 import { io } from "socket.io-client";
 
-export const ScanQr = () => {
-  const scannerRef = useRef(null);
-  const [curntOrder, setCurntOrder] = useState<any>(null);
-  let scanner: any;
+interface Order {
+  _id: string;
+  orderNo: string;
+  items: {
+    id: {
+      name: string;
+      price: number;
+    };
+    quantity: number;
+  }[];
+}
+
+export const ScanQr: React.FC = () => {
+  const scannerRef = useRef<HTMLVideoElement>(null);
+  const [curntOrder, setCurntOrder] = useState<Order | "loading" | null>(null);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  let scanner: QrScanner | null = null;
   const regex = /^[0-9a-fA-F]{24}$/;
 
+  const isMobileDevice = (): boolean => {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+      navigator.userAgent
+    );
+  };
+
   useEffect(() => {
-    if (!scannerRef.current) return;
-    let lastResult: null | string = null;
-    scanner = new QrScanner(scannerRef.current, (result) => {
+    setIsMobile(isMobileDevice());
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile || !scannerRef.current) return;
+
+    let lastResult: string | null = null;
+    scanner = new QrScanner(scannerRef.current, (result: string) => {
       if (regex.test(result) && result !== lastResult) {
         lastResult = result;
-        scanner.stop();
+        if (scanner) {
+          scanner.stop();
+        }
         setCurntOrder("loading");
-        // fetch order from backend
         axios
-          .patch(BACKEND_URL + "/orders/" + result, { status: "current" })
+          .patch(`${BACKEND_URL}/orders/${result}`, { status: "current" })
           .then((response) => {
             if (response.data.success === false) {
               setCurntOrder(null);
-              window.alert("Invalid Order");
+              alert("Invalid Order");
               console.log(response.data.msg);
               return;
             }
@@ -34,67 +58,72 @@ export const ScanQr = () => {
           })
           .catch((e) => {
             setCurntOrder(null);
-            window.alert("Invalid Order");
+            alert("Invalid Order");
             console.error(e);
           });
       }
       console.log(result);
     });
-    scanner.start();
-  }, [scannerRef.current, curntOrder]);
+
+    if (scanner) {
+      scanner.start();
+    }
+
+    return () => {
+      if (scanner) {
+        scanner.stop();
+      }
+    };
+  }, [isMobile, scannerRef.current, curntOrder]);
 
   useEffect(() => {
     const socket = io(BACKEND_URL, { path: "/listen/curntOrder" });
     socket.on("connect", () => {
       console.log("connected");
     });
-    socket.on("update", (data) => {
-      console.log("Recieved data");
+    socket.on("update", (data: Order) => {
+      console.log("Received data");
       setCurntOrder(data);
     });
   }, []);
 
   const confirmOrder = () => {
-    if (!curntOrder) return;
+    if (!curntOrder || curntOrder === "loading") return;
     axios
-      .patch(BACKEND_URL + "/orders/" + curntOrder._id, {
-        status: "confirmed",
-      })
+      .patch(`${BACKEND_URL}/orders/${curntOrder._id}`, { status: "confirmed" })
       .then((response) => {
         if (response.data.success) {
-          window.alert("✅Order Confirmed");
+          alert("✅ Order Confirmed");
           setCurntOrder(null);
         } else {
-          window.alert("❌Order Failed");
+          alert("❌ Order Failed");
           console.error(response.data.msg);
           setCurntOrder(null);
         }
       })
       .catch((e) => {
-        window.alert("❌Order Failed");
+        alert("❌ Order Failed");
         console.error(e);
         setCurntOrder(null);
       });
   };
 
   const cancelOrder = () => {
-    if (!curntOrder) return;
+    if (!curntOrder || curntOrder === "loading") return;
     axios
-      .patch(BACKEND_URL + "/orders/" + curntOrder._id, {
-        status: "finished",
-      })
+      .patch(`${BACKEND_URL}/orders/${curntOrder._id}`, { status: "finished" })
       .then((response) => {
         if (response.data.success) {
-          window.alert("✅Order Cancelled");
+          alert("✅ Order Cancelled");
           setCurntOrder(null);
         } else {
-          window.alert("❌Order cancel failed");
+          alert("❌ Order cancel failed");
           console.error(response.data.msg);
           setCurntOrder(null);
         }
       })
       .catch((e) => {
-        window.alert("❌Order cancel failed");
+        alert("❌ Order cancel failed");
         console.error(e);
         setCurntOrder(null);
       });
@@ -103,17 +132,25 @@ export const ScanQr = () => {
   return (
     <>
       <Navbar />
-      <div className="flex justify-center min-h-screen w-screen max-w-5xl mx-auto px-3 text-center">
+      <div className="flex justify-center w-screen max-w-5xl mx-auto px-3 text-center">
         {curntOrder === "loading" ? (
           <div>loading</div>
         ) : !curntOrder ? (
           <div className="items-center">
             <h1 className="text-2xl font-bold mb-4">Scan QR</h1>
-            <video ref={scannerRef} className="block max-w-full"></video>
+            {isMobile ? (
+              <div className="flex justify-center items-center h-screen w-screen">
+                <video
+                  ref={scannerRef}
+                  className="block w-full h-full object-cover"></video>
+              </div>
+            ) : (
+              <div>Please use a mobile device to scan the QR code.</div>
+            )}
           </div>
         ) : (
           <div className="bg-gray-900 text-white p-6 rounded-lg shadow-lg m-auto">
-            <h2 className="text-2xl font-bold mb-4">Order Confirm Page</h2>
+            <h2 className="text-2xl font-bold mb-4">Scanned Order</h2>
             <h3 className="text-xl mb-4">Order No: {curntOrder.orderNo}</h3>
             <table className="w-full table-auto mb-4">
               <thead>
@@ -124,11 +161,10 @@ export const ScanQr = () => {
                 </tr>
               </thead>
               <tbody>
-                {curntOrder.items.map((item: any, index: number) => (
+                {curntOrder.items.map((item, index) => (
                   <tr
                     key={index}
-                    className="bg-gray-800 border-b border-gray-700"
-                  >
+                    className="bg-gray-800 border-b border-gray-700">
                     <td className="px-4 py-2">{item.id.name}</td>
                     <td className="px-4 py-2">{item.quantity}</td>
                     <td className="px-4 py-2">{item.id.price}</td>
@@ -139,24 +175,21 @@ export const ScanQr = () => {
                   <td className="px-4 py-2"></td>
                   <td className="px-4 py-2">
                     {curntOrder.items
-                      .map((item: any) => item.quantity * item.id.price)
-                      .reduce((a: any, b: any) => a + b, 0)}
+                      .map((item) => item.quantity * item.id.price)
+                      .reduce((a, b) => a + b, 0)}
                   </td>
                 </tr>
               </tbody>
             </table>
-
             <button
-              onClick={() => confirmOrder()}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
-            >
-              Confirm Order →
+              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              onClick={cancelOrder}>
+              Cancel
             </button>
             <button
-              className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-4"
-              onClick={() => cancelOrder()}
-            >
-              Cancel
+              onClick={confirmOrder}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 ml-4 rounded transition duration-300">
+              Confirm Order →
             </button>
           </div>
         )}

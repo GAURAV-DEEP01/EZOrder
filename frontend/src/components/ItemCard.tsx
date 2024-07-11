@@ -48,9 +48,7 @@ export default function ItemCard({
           </div>
         )}
         <img
-          src={
-            "https://upload.wikimedia.org/wikipedia/commons/c/cf/Samosa-and-Chatni.jpg"
-          }
+          src={item.image}
           alt={item.name}
           className="w-24 h-24 object-cover rounded-lg mr-4 hidden sm:block"
         />

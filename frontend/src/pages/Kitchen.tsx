@@ -39,7 +39,7 @@ export const Kitchen = () => {
       setOrders(data);
     } catch (e) {
       console.error(e);
-      window.alert("Unable to fetch orders");
+      alert("Unable to fetch orders");
       setOrders([]);
     }
   };
@@ -97,7 +97,7 @@ const KitchenOrder = ({
         .then((response) => {
           if (!response.data.success) {
             console.error(response.data.msg);
-            window.alert("❌Update Failed");
+            alert("❌Update Failed");
           }
           reFetchOrder();
         });
@@ -114,8 +114,7 @@ const KitchenOrder = ({
         <div>
           <button
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mr-2"
-            onClick={handleOrderDone}
-          >
+            onClick={handleOrderDone}>
             DONE
           </button>
           <button
@@ -123,8 +122,7 @@ const KitchenOrder = ({
               "bg-slate-200 text-white inline-block p-2 rounded-md shadow-lg hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-gray-500 " +
               (!toggle ? " -rotate-90" : "")
             }
-            onClick={() => setToggle(!toggle)}
-          >
+            onClick={() => setToggle(!toggle)}>
             <img src={expandIcon} className="h-3 aspect-square" />
           </button>
         </div>

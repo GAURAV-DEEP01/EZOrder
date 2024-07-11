@@ -67,16 +67,16 @@ export default function Admin() {
       .patch(BACKEND_URL + "/items", items)
       .then((res) => {
         if (res.data.success) {
-          window.alert("✅Update Successful!");
+          alert("✅Update Successful!");
           setBtnDisabled(true);
         } else {
-          window.alert("❌Update Failed!");
+          alert("❌Update Failed!");
           console.error(res.data.msg);
         }
       })
       .catch((err) => {
         console.error(err);
-        window.alert("❌Update Failed!");
+        alert("❌Update Failed!");
       });
   }
   return (
@@ -91,8 +91,7 @@ export default function Admin() {
               : " bg-green-500 cursor-pointer")
           }
           onClick={handleUpdate}
-          disabled={btnDisabled}
-        >
+          disabled={btnDisabled}>
           Save
         </button>
         {items.map((item) => (

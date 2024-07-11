@@ -4,174 +4,199 @@ export const cafeteriaItems = [
     price: 150,
     availableQuantity: 50,
     soldQuantity: 20,
-    image: "https://example.com/images/veggie_burger.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Chicken Sandwich",
     price: 200,
     availableQuantity: 40,
     soldQuantity: 25,
-    image: "https://example.com/images/chicken_sandwich.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Cheese Pizza Slice",
     price: 100,
     availableQuantity: 60,
     soldQuantity: 30,
-    image: "https://example.com/images/cheese_pizza_slice.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Caesar Salad",
     price: 120,
     availableQuantity: 30,
     soldQuantity: 10,
-    image: "https://example.com/images/caesar_salad.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Grilled Cheese Sandwich",
     price: 80,
     availableQuantity: 70,
     soldQuantity: 50,
-    image: "https://example.com/images/grilled_cheese_sandwich.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Fruit Salad",
     price: 90,
     availableQuantity: 50,
     soldQuantity: 20,
-    image: "https://example.com/images/fruit_salad.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Chocolate Muffin",
     price: 50,
     availableQuantity: 80,
     soldQuantity: 60,
-    image: "https://example.com/images/chocolate_muffin.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Pasta Alfredo",
     price: 180,
     availableQuantity: 40,
     soldQuantity: 30,
-    image: "https://example.com/images/pasta_alfredo.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "French Fries",
     price: 70,
     availableQuantity: 100,
     soldQuantity: 80,
-    image: "https://example.com/images/french_fries.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Tuna Salad Sandwich",
     price: 150,
     availableQuantity: 40,
     soldQuantity: 20,
-    image: "https://example.com/images/tuna_salad_sandwich.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Apple Pie Slice",
     price: 60,
     availableQuantity: 50,
     soldQuantity: 30,
-    image: "https://example.com/images/apple_pie_slice.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Beef Tacos",
     price: 110,
     availableQuantity: 60,
     soldQuantity: 40,
-    image: "https://example.com/images/beef_tacos.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Veggie Wrap",
     price: 130,
     availableQuantity: 50,
     soldQuantity: 25,
-    image: "https://example.com/images/veggie_wrap.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Chicken Caesar Wrap",
     price: 170,
     availableQuantity: 30,
     soldQuantity: 20,
-    image: "https://example.com/images/chicken_caesar_wrap.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Orange Juice",
     price: 40,
     availableQuantity: 100,
     soldQuantity: 90,
-    image: "https://example.com/images/orange_juice.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Pancakes",
     price: 120,
     availableQuantity: 45,
     soldQuantity: 15,
-    image: "https://example.com/images/pancakes.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Club Sandwich",
     price: 180,
     availableQuantity: 35,
     soldQuantity: 25,
-    image: "https://example.com/images/club_sandwich.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Margarita Pizza Slice",
     price: 110,
     availableQuantity: 55,
     soldQuantity: 30,
-    image: "https://example.com/images/margarita_pizza_slice.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Greek Salad",
     price: 130,
     availableQuantity: 25,
     soldQuantity: 10,
-    image: "https://example.com/images/greek_salad.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Hot Dog",
     price: 90,
     availableQuantity: 65,
     soldQuantity: 40,
-    image: "https://example.com/images/hot_dog.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Blueberry Muffin",
     price: 60,
     availableQuantity: 75,
     soldQuantity: 55,
-    image: "https://example.com/images/blueberry_muffin.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Lasagna",
     price: 200,
     availableQuantity: 30,
     soldQuantity: 15,
-    image: "https://example.com/images/lasagna.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Onion Rings",
     price: 80,
     availableQuantity: 85,
     soldQuantity: 70,
-    image: "https://example.com/images/onion_rings.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Spinach Wrap",
     price: 140,
     availableQuantity: 40,
     soldQuantity: 20,
-    image: "https://example.com/images/spinach_wrap.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
   {
     name: "Iced Tea",
     price: 50,
     availableQuantity: 95,
     soldQuantity: 80,
-    image: "https://example.com/images/iced_tea.jpg",
+    image:
+      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
   },
 ];
