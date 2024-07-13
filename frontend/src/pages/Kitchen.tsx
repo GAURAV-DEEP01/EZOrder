@@ -143,9 +143,7 @@ const KitchenOrder = ({
                   <td className="border px-4 py-2">{item.id.name}</td>
                   <td className="border px-4 py-2">{item.quantity}</td>
                   <td className="border px-4 py-2">
-                    <button className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-700">
-                      Done
-                    </button>
+                    <input type="checkbox"/>
                   </td>
                 </tr>
               ))}
