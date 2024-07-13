@@ -54,17 +54,32 @@ const getAllOrders = async (): Promise<Orders_t[]> => {
   }
 };
 
-const placeOrder = async (
-  ordereditems: OrderedItem_t[]
-): Promise<mongoose.Schema.Types.ObjectId> => {
+const getNextOrderNumber = async (): Promise<Number> => {
+  try {
+    const res = await Orders.findOne({
+      date: { $gt: new Date().setHours(0, 0, 0, 0) },
+    })
+      .sort({ orderNo: -1 })
+      .limit(1);
+
+    let orderNum = res?.orderNo || 0;
+    orderNum = ++orderNum % 10000;
+    return orderNum;
+  } catch (e) {
+    throw e;
+  }
+};
+
+const placeOrder = async (ordereditems: OrderedItem_t[]): Promise<Orders_t> => {
   try {
     const newOrder: Orders_t = new Orders({
+      orderNo: await getNextOrderNumber(),
       items: ordereditems,
       status: "ordered",
       date: new Date(),
     });
     await newOrder.save();
-    return newOrder.id;
+    return newOrder;
   } catch (e) {
     throw e;
   }

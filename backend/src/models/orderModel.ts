@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const OrderSchema = new mongoose.Schema({
-  orderNo: { type: Number, default: 99 },
+  orderNo: { type: Number, default: -1 },
   items: [
     {
       id: {
