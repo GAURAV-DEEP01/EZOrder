@@ -11,10 +11,12 @@ interface OrderContextProps {
   updateQuantity: (itemId: string, quantity: number) => void;
   removeItem: (itemId: string) => void;
   clearOrder: () => void;
-  generateQr: (orderId: string) => void;
+  generateQr: (orderId: string, orderNo: number) => void;
   qrImage: string | undefined;
+  orderNumber: number;
+  setOrderNumber: React.Dispatch<React.SetStateAction<number>>;
   orderId: string;
-  confirmRefresh: () => void;
+  // confirmRefresh: () => void;
 }
 
 const OrderContext = createContext<OrderContextProps | undefined>(undefined);
@@ -24,6 +26,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentOrder, setCurrentOrder] = useState<OrderItem[]>([]);
   const [qrImage, setQrImage] = useState<string>();
   const [orderId, setOrderId] = useState<string>("");
+  const [orderNumber, setOrderNumber] = useState<number>(0);
 
   useEffect(() => {
     const storedOrder = localStorage.getItem("order");
@@ -33,29 +36,29 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
       const orderDate = new Date(parsedOrder.date);
       const difference = now.getTime() - orderDate.getTime();
       const hoursDifference = difference / (1000 * 3600);
-
       if (hoursDifference < 24) {
         setOrderId(parsedOrder.orderId);
+        setOrderNumber(parsedOrder.orderNo);
         QRCode.toDataURL(parsedOrder.orderId).then(setQrImage);
       }
     }
   }, []);
 
-  const confirmRefresh = () => {
-    useEffect(() => {
-      const unloadCallback = (event: {
-        preventDefault: () => void;
-        returnValue: string;
-      }) => {
-        event.preventDefault();
-        event.returnValue = "";
-        return "";
-      };
+  // const confirmRefresh = () => {
+  //   useEffect(() => {
+  //     const unloadCallback = (event: {
+  //       preventDefault: () => void;
+  //       returnValue: string;
+  //     }) => {
+  //       event.preventDefault();
+  //       event.returnValue = "";
+  //       return "";
+  //     };
 
-      window.addEventListener("beforeunload", unloadCallback);
-      return () => window.removeEventListener("beforeunload", unloadCallback);
-    }, []);
-  };
+  //     window.addEventListener("beforeunload", unloadCallback);
+  //     return () => window.removeEventListener("beforeunload", unloadCallback);
+  //   }, []);
+  // };
 
   const addItem = (item: Item) => {
     setCurrentOrder((prevOrder) => {
@@ -125,11 +128,15 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentOrder([]);
   };
 
-  const generateQr = (orderId: string) => {
+  const generateQr = (orderId: string, orderNumber: number) => {
     try {
       QRCode.toDataURL(orderId).then(setQrImage);
       setOrderId(orderId);
-      const orderData = { orderId, date: new Date().toISOString() };
+      const orderData = {
+        orderId,
+        date: new Date().toISOString(),
+        orderNumber,
+      };
       localStorage.setItem("order", JSON.stringify(orderData));
     } catch (error) {
       console.error("Error generating QR code: ", error);
@@ -149,8 +156,10 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         clearOrder,
         generateQr,
         qrImage,
+        orderNumber,
+        setOrderNumber,
         orderId,
-        confirmRefresh,
+        // confirmRefresh,
       }}>
       {children}
     </OrderContext.Provider>

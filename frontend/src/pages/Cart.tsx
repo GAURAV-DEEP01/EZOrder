@@ -12,7 +12,8 @@ export const Cart = () => {
     removeItem,
     clearOrder,
     generateQr,
-    confirmRefresh,
+    // confirmRefresh,
+    setOrderNumber,
   } = useOrder();
   const navigate = useNavigate();
 
@@ -37,20 +38,23 @@ export const Cart = () => {
 
     try {
       const response = await axios.post(`${BACKEND_URL}/orders`, orderData);
-      if (response.data.success) {
-        const id = response.data.orderId;
-        generateQr(id);
+      const parsedRes = response.data;
+      if (parsedRes.success) {
+        const id = parsedRes.data._id;
+        const orderNo = parsedRes.data.orderNo;
+        setOrderNumber(orderNo);
+        generateQr(id, orderNo);
         clearOrder();
         navigate("/qr");
       } else {
-        throw response.data.msg;
+        throw response.data.error;
       }
-    } catch (error) {
-      alert("Error placing an order\nTry again later");
+    } catch (error: any) {
+      alert(error.response.data.error);
       console.error("Error placing order : ", error);
     }
   };
-  confirmRefresh();
+  // confirmRefresh();
   return (
     <div>
       <Navbar displaySearch={false} />

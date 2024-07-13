@@ -20,6 +20,7 @@ router.get("/", async (req, res) => {
       });
   }
 });
+
 router.get("/:id", async (req, res) => {
   try {
     const order: Orders_t = await dbUtil.getOrder(req.params as Orders_t);
@@ -42,24 +43,23 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const orderid: mongoose.Schema.Types.ObjectId = await dbUtil.placeOrder(
+    const order: Orders_t = await dbUtil.placeOrder(
       req.body as OrderedItem_t[]
     );
     res.status(200).send({
       success: true,
       msg: "Order Placed",
-      orderId: orderid,
+      data: order,
     });
   } catch (e) {
     if (e instanceof Error)
-      res.status(500).send({
+      res.status(501).send({
         success: false,
         msg: "Couldn't place Order",
         error: e.message,
       });
   }
 });
-
 
 router.patch("/:id", async (req, res) => {
   try {
@@ -74,6 +74,5 @@ router.patch("/:id", async (req, res) => {
       });
   }
 });
-
 
 export default router;

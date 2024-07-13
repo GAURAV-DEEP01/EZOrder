@@ -22,7 +22,7 @@ export const Order = () => {
     currentOrder,
     addItem,
     updateQuantity,
-    confirmRefresh,
+    // confirmRefresh,
   } = useOrder();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -84,7 +84,7 @@ export const Order = () => {
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  confirmRefresh();
+  // confirmRefresh();
 
   const total = currentOrder.reduce(
     (acc, item) => acc + (item.price ?? 0) * item.quantity,
@@ -132,7 +132,7 @@ export const Order = () => {
           </div>
           <Link
             to={"/cart"}
-            className="bg-white text-black pl-4 pr-2 py-2 hover:bg-slate-200">
+            className="bg-white text-black pl-4 pr-2 py-2 hover:bg-slate-200 rounded-md">
             <div className="flex">
               View Cart
               <svg
@@ -147,6 +147,9 @@ export const Order = () => {
           </Link>
         </div>
       )}
+      <Link to={"/admin"} className=" bg-black text-black">
+        admin
+      </Link>
     </div>
   );
 };
