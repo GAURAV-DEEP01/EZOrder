@@ -1,9 +1,13 @@
 import { useOrder } from "../contexts/OrderContext";
 import { useEffect, useState } from "react";
 
+interface storedOrder_t {
+  orderId: string;
+  orderNumber: number;
+}
 export const QrPage = () => {
-  const { qrImage, orderId } = useOrder();
-  const [storedOrder, setStoredOrder] = useState<string | null>(null);
+  const { qrImage, orderId, orderNumber } = useOrder();
+  const [storedOrder, setStoredOrder] = useState<storedOrder_t | null>(null);
   const [qrExpired, setQrExpired] = useState<boolean>(false);
   const [validityTime, setValidityTime] = useState<string>("");
 
@@ -17,7 +21,8 @@ export const QrPage = () => {
       const hoursDifference = difference / (1000 * 3600);
 
       if (hoursDifference < 24) {
-        setStoredOrder(parsedOrder.orderId);
+        setStoredOrder(parsedOrder);
+
         const remainingTime = 24 * 60 * 60 * 1000 - difference;
         const hours = Math.floor(remainingTime / (1000 * 60 * 60));
         const minutes = Math.floor(
@@ -42,9 +47,12 @@ export const QrPage = () => {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col items-center p-6 bg-white rounded-lg shadow-lg">
-        <h1 className="text-2xl font-semibold mb-4 text-black">
-          Your Order QR Code
-        </h1>
+        <h2 className="text-2xl font-semibold mb-4 text-black">Order Number</h2>
+        {orderNumber || storedOrder ? (
+          <h1 className="text-2xl font-semibold mb-4 text-black">
+            {orderNumber ? orderNumber : storedOrder?.orderNumber}
+          </h1>
+        ) : null}
         {qrImage || storedOrder ? (
           <div className="text-center">
             <img
@@ -53,7 +61,7 @@ export const QrPage = () => {
               className="w-64 h-64 border-4 border-gray-300 rounded-lg shadow-md"
             />
             <p className="text-lg text-gray-700">Order Id:</p>
-            <p className="mb-2 text-black">{orderId || storedOrder}</p>
+            <p className="mb-2 text-black">{orderId || storedOrder?.orderId}</p>
             <p className="mb-2 text-sm text-gray-600">
               Valid for: {validityTime}
             </p>

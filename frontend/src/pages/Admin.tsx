@@ -85,9 +85,9 @@ export default function Admin() {
       <div className="justify-center space-y-6 w-screen max-w-5xl mx-auto">
         <button
           className={
-            "hover:bg-green-700 mx-5 my-3 text-white font-bold py-2 px-4 rounded" +
+            " mx-5 my-3 text-white font-bold py-2 px-4 rounded" +
             (btnDisabled
-              ? " bg-green-700 cursor-not-allowed"
+              ? " bg-gray-600 cursor-not-allowed"
               : " bg-green-500 cursor-pointer")
           }
           onClick={handleUpdate}

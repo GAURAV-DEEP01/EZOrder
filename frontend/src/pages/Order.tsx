@@ -132,7 +132,7 @@ export const Order = () => {
           </div>
           <Link
             to={"/cart"}
-            className="bg-white text-black pl-4 pr-2 py-2 hover:bg-slate-200">
+            className="bg-white text-black pl-4 pr-2 py-2 hover:bg-slate-200 rounded-md">
             <div className="flex">
               View Cart
               <svg
