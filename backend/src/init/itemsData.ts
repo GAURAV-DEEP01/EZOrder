@@ -117,7 +117,7 @@ export const cafeteriaItems = [
     availableQuantity: 50,
     soldQuantity: 10,
     image:
-      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
+      "https://theobroma.in/cdn/shop/files/HIGH-RES_Chicken_Tikka_Sandwich_-_Square_1.jpg?v=1710549168",
   },
   {
     name: "Veg Sandwich",
@@ -125,7 +125,7 @@ export const cafeteriaItems = [
     availableQuantity: 50,
     soldQuantity: 10,
     image:
-      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
+      "https://www.superhealthykids.com/veggie-sandwich-with-herbed-cream-cheese/",
   },
   {
     name: "Kebab",
@@ -141,7 +141,7 @@ export const cafeteriaItems = [
     availableQuantity: 20,
     soldQuantity: 2,
     image:
-      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
+      "https://thefestivefoodies.com/wp-content/uploads/2024/04/0_0-1-500x500.webp",
   },
   {
     name: "Watermelon Juice",
@@ -149,7 +149,7 @@ export const cafeteriaItems = [
     availableQuantity: 40,
     soldQuantity: 3,
     image:
-      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
+      "https://img.freepik.com/premium-photo/illustration-watermelon-juice-watermelon-brilliance_435599-17992.jpg",
   },
   {
     name: "Mango Juice",
@@ -157,6 +157,6 @@ export const cafeteriaItems = [
     availableQuantity: 40,
     soldQuantity: 5,
     image:
-      "https://www.eatingwell.com/thmb/aKA6WL4j01orJ6F7v9bF4PH6B7Y=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/air-fryer-cheeseburgers-9e0cf0071bcb4b8d9bc806cabfb61347.jpg",
+      "https://img.freepik.com/premium-photo/mango-juice-with-mango-slice-isolated-white-background-mango-fruits_87394-46036.jpg",
   },
 ];
