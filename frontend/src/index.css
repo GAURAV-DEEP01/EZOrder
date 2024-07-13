@@ -6,3 +6,33 @@ body {
   background-color: black;
   color: white;
 }
+
+@keyframes popUp {
+  from {
+    bottom: -100px;
+    opacity: 0;
+  }
+  to {
+    bottom: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes popDown {
+  from {
+    bottom: 0;
+    opacity: 1;
+  }
+  to {
+    bottom: -100px;
+    opacity: 0;
+  }
+}
+
+.pop-up {
+  animation: popUp 0.3s forwards;
+}
+
+.pop-down {
+  animation: popDown 0.3s forwards;
+}

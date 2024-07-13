@@ -51,7 +51,8 @@ export const cafeteriaItems = [
     price: 70,
     availableQuantity: 30,
     soldQuantity: 4,
-    image: "https://www.anifabiriyani.com/meta/biriyani-spl.webpg",
+    image:
+      "https://media-assets.swiggy.com/swiggy/image/upload/f_auto,q_auto,fl_lossy/aql3oegyi6gvxvi6ym9u",
   },
   {
     name: "Samosa",
@@ -123,7 +124,7 @@ export const cafeteriaItems = [
     availableQuantity: 50,
     soldQuantity: 10,
     image:
-      "https://www.superhealthykids.com/veggie-sandwich-with-herbed-cream-cheese/",
+      "https://www.indianhealthyrecipes.com/wp-content/uploads/2022/03/veg-grilled-sandwich-recipe.jpg",
   },
   {
     name: "Kebab",

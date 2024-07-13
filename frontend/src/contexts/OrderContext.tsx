@@ -69,7 +69,16 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
             : orderItem
         );
       } else {
-        return [...prevOrder, { _id: item._id, quantity: 1 }];
+        return [
+          ...prevOrder,
+          {
+            _id: item._id,
+            name: item.name,
+            price: item.price,
+            quantity: 1,
+            image: item.image,
+          },
+        ];
       }
     });
   };
@@ -80,15 +89,28 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         (orderItem) => orderItem._id === itemId
       );
       if (existingItem) {
-        return prevOrder.map((orderItem) =>
-          orderItem._id === itemId
-            ? { ...orderItem, quantity: quantity }
-            : orderItem
-        ).filter((orderItem) => orderItem.quantity > 0);
+        return prevOrder
+          .map((orderItem) =>
+            orderItem._id === itemId
+              ? { ...orderItem, quantity: quantity }
+              : orderItem
+          )
+          .filter((orderItem) => orderItem.quantity > 0);
       } else {
-        return [...prevOrder, { _id: itemId, quantity: 1 }].filter(
-          (orderItem) => orderItem.quantity > 0
-        );
+        const item = items.find((item) => item._id === itemId);
+        if (item) {
+          return [
+            ...prevOrder,
+            {
+              _id: item._id,
+              name: item.name,
+              price: item.price,
+              quantity,
+              image: item.image,
+            },
+          ].filter((orderItem) => orderItem.quantity > 0);
+        }
+        return prevOrder;
       }
     });
   };
@@ -144,6 +166,9 @@ export const useOrder = () => {
 };
 
 export interface OrderItem {
+  price?: number;
   _id: string;
+  name: string;
   quantity: number;
+  image: string;
 }
