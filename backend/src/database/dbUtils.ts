@@ -4,6 +4,7 @@ import Orders from "../models/orderModel";
 import Item_t from "../types/items";
 import { Orders_t, OrderedItem_t } from "../types/orders";
 import AppError, { AppErrorType } from "../types/AppError";
+import Items_t from "../types/items";
 
 const getItem = async (param: Item_t): Promise<Item_t> => {
   try {
@@ -72,6 +73,17 @@ const getNextOrderNumber = async (): Promise<Number> => {
 
 const placeOrder = async (ordereditems: OrderedItem_t[]): Promise<Orders_t> => {
   try {
+    for (let item of ordereditems) {
+      let dbItem: Items_t | null = await Items.findOne({ _id: item.id });
+      if (dbItem == null) throw new Error("Invalid item ID");
+      if (item.quantity > dbItem.availableQuantity)
+        throw new Error(
+          "Requested quantity (${item.quantity}) exceeds available stock (${dbItem.availableQuantity})"
+        );
+      // uncomment during deployment
+      // dbItem.availableQuantity = dbItem.availableQuantity - item.quantity;
+      // await dbItem.save();
+    }
     const newOrder: Orders_t = new Orders({
       orderNo: await getNextOrderNumber(),
       items: ordereditems,
