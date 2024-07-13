@@ -147,6 +147,9 @@ export const Order = () => {
           </Link>
         </div>
       )}
+      <Link to={"/admin"} className=" bg-black text-black">
+        admin
+      </Link>
     </div>
   );
 };
