@@ -47,10 +47,10 @@ export const Cart = () => {
         clearOrder();
         navigate("/qr");
       } else {
-        throw response.data.msg;
+        throw response.data.error;
       }
-    } catch (error) {
-      alert("Error placing an order\nTry again later");
+    } catch (error: any) {
+      alert(error.response.data.error);
       console.error("Error placing order : ", error);
     }
   };
