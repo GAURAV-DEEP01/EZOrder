@@ -22,7 +22,7 @@ export const Order = () => {
     currentOrder,
     addItem,
     updateQuantity,
-    confirmRefresh,
+    // confirmRefresh,
   } = useOrder();
 
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -84,7 +84,7 @@ export const Order = () => {
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  confirmRefresh();
+  // confirmRefresh();
 
   const total = currentOrder.reduce(
     (acc, item) => acc + (item.price ?? 0) * item.quantity,

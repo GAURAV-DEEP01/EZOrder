@@ -12,7 +12,7 @@ export const Cart = () => {
     removeItem,
     clearOrder,
     generateQr,
-    confirmRefresh,
+    // confirmRefresh,
     setOrderNumber,
   } = useOrder();
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ export const Cart = () => {
       console.error("Error placing order : ", error);
     }
   };
-  confirmRefresh();
+  // confirmRefresh();
   return (
     <div>
       <Navbar displaySearch={false} />

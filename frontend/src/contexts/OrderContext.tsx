@@ -16,7 +16,7 @@ interface OrderContextProps {
   orderNumber: number;
   setOrderNumber: React.Dispatch<React.SetStateAction<number>>;
   orderId: string;
-  confirmRefresh: () => void;
+  // confirmRefresh: () => void;
 }
 
 const OrderContext = createContext<OrderContextProps | undefined>(undefined);
@@ -44,21 +44,21 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  const confirmRefresh = () => {
-    useEffect(() => {
-      const unloadCallback = (event: {
-        preventDefault: () => void;
-        returnValue: string;
-      }) => {
-        event.preventDefault();
-        event.returnValue = "";
-        return "";
-      };
+  // const confirmRefresh = () => {
+  //   useEffect(() => {
+  //     const unloadCallback = (event: {
+  //       preventDefault: () => void;
+  //       returnValue: string;
+  //     }) => {
+  //       event.preventDefault();
+  //       event.returnValue = "";
+  //       return "";
+  //     };
 
-      window.addEventListener("beforeunload", unloadCallback);
-      return () => window.removeEventListener("beforeunload", unloadCallback);
-    }, []);
-  };
+  //     window.addEventListener("beforeunload", unloadCallback);
+  //     return () => window.removeEventListener("beforeunload", unloadCallback);
+  //   }, []);
+  // };
 
   const addItem = (item: Item) => {
     setCurrentOrder((prevOrder) => {
@@ -159,7 +159,7 @@ export const OrderProvider = ({ children }: { children: React.ReactNode }) => {
         orderNumber,
         setOrderNumber,
         orderId,
-        confirmRefresh,
+        // confirmRefresh,
       }}>
       {children}
     </OrderContext.Provider>

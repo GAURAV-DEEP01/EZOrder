@@ -33,19 +33,19 @@ export default function Admin() {
   }, []);
 
   //confirm refresh
-  useEffect(() => {
-    const unloadCallback = (event: {
-      preventDefault: () => void;
-      returnValue: string;
-    }) => {
-      event.preventDefault();
-      event.returnValue = "";
-      return "";
-    };
+  // useEffect(() => {
+  //   const unloadCallback = (event: {
+  //     preventDefault: () => void;
+  //     returnValue: string;
+  //   }) => {
+  //     event.preventDefault();
+  //     event.returnValue = "";
+  //     return "";
+  //   };
 
-    window.addEventListener("beforeunload", unloadCallback);
-    return () => window.removeEventListener("beforeunload", unloadCallback);
-  }, []);
+  //   window.addEventListener("beforeunload", unloadCallback);
+  //   return () => window.removeEventListener("beforeunload", unloadCallback);
+  // }, []);
 
   function handleItemChange(
     itemId: string,
