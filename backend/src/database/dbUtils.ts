@@ -78,7 +78,7 @@ const placeOrder = async (ordereditems: OrderedItem_t[]): Promise<Orders_t> => {
       if (dbItem == null) throw new Error("Invalid item ID");
       if (item.quantity > dbItem.availableQuantity)
         throw new Error(
-          `Requested quantity (${item.quantity}) exceeds available stock (${dbItem.availableQuantity})`
+          `Requested quantity ${item.quantity} of ${dbItem.name} exceeds available stock ${dbItem.availableQuantity}`
         );
       // uncomment during deployment
       // dbItem.availableQuantity = dbItem.availableQuantity - item.quantity;
