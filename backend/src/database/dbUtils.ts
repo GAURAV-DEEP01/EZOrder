@@ -80,9 +80,8 @@ const placeOrder = async (ordereditems: OrderedItem_t[]): Promise<Orders_t> => {
         throw new Error(
           `Requested quantity ${item.quantity} of ${dbItem.name} exceeds available stock ${dbItem.availableQuantity}`
         );
-      // uncomment during deployment
-      // dbItem.availableQuantity = dbItem.availableQuantity - item.quantity;
-      // await dbItem.save();
+      dbItem.availableQuantity = dbItem.availableQuantity - item.quantity;
+      await dbItem.save();
     }
     const newOrder: Orders_t = new Orders({
       orderNo: await getNextOrderNumber(),

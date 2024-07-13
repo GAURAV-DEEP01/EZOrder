@@ -53,7 +53,7 @@ router.post("/", async (req, res) => {
     });
   } catch (e) {
     if (e instanceof Error)
-      res.status(500).send({
+      res.status(501).send({
         success: false,
         msg: "Couldn't place Order",
         error: e.message,
