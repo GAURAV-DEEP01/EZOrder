@@ -9,7 +9,7 @@ const Login: React.FC = () => {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (username === "nischal" && password === "123456") {
+    if (username === "admin" && password === "123456") {
       localStorage.setItem("isAuthenticated", "true");
       navigate("/admin");
     } else {
@@ -19,6 +19,15 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
+      <div
+        id="toast-top-left"
+        className="fixed flex items-center w-fit max-w-xs p-4 px-10 space-x-4 text-gray-500 bg-white divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg top-5 left-5"
+        role="alert">
+        <div className="text-sm font-normal">
+          <div>Username - "admin"</div>
+          <div>Password - "123456"</div>
+        </div>
+      </div>
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold mb-6 text-center text-black">
           Admin Login
