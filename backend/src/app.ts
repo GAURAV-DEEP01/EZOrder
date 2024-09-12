@@ -23,12 +23,11 @@ app.use(
 app.use(express.json());
 
 // Routes
-
 app.use("/items", itemRouter);
 
 app.use("/orders", orderRouter);
 
-app.all("*", (req, res) => {
+app.all(/(.*)/, (_, res) => {
   res.status(404).send({ success: false, msg: "Invalid route" });
 });
 

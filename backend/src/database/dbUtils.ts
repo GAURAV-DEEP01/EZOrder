@@ -6,9 +6,9 @@ import { Orders_t, OrderedItem_t } from "../types/orders";
 import AppError, { AppErrorType } from "../types/AppError";
 import Items_t from "../types/items";
 
-const getItem = async (param: Item_t): Promise<Item_t> => {
+const getItem = async (id: string): Promise<Item_t> => {
   try {
-    const item: Item_t | null = await Items.findOne({ _id: param.id }).select(
+    const item: Item_t | null = await Items.findOne({ _id: id }).select(
       "-__v"
     );
     if (item == null) throw new Error("Item not found, wrong item ID");
@@ -27,7 +27,7 @@ const getAllItems = async (): Promise<Item_t[]> => {
 };
 
 const updateItemQuantity = async (
-  params: Item_t,
+  id: string,
   itemUpdateReq: Item_t
 ): Promise<void> => {
   if (
@@ -36,7 +36,7 @@ const updateItemQuantity = async (
   )
     throw new Error("Updation Error: Either Price or Quantity is required");
 
-  const filter = { _id: params.id };
+  const filter = { _id: id };
   const set = { $set: { ...itemUpdateReq } };
   await Items.updateOne(filter, set);
 };
@@ -81,6 +81,7 @@ const placeOrder = async (ordereditems: OrderedItem_t[]): Promise<Orders_t> => {
           `Requested quantity ${item.quantity} of ${dbItem.name} exceeds available stock ${dbItem.availableQuantity}`
         );
       dbItem.availableQuantity = dbItem.availableQuantity - item.quantity;
+      dbItem.soldQuantity++;
       await dbItem.save();
     }
     const newOrder: Orders_t = new Orders({
@@ -157,7 +158,7 @@ const getOrder = async (requestOrder: Orders_t): Promise<Orders_t> => {
 };
 
 const updateOrder = async (
-  params: Orders_t,
+  id: string,
   orderUpdateReq: Orders_t
 ): Promise<void> => {
   if (orderUpdateReq.status == undefined)
@@ -180,7 +181,7 @@ const updateOrder = async (
 
   try {
     const { id, ...setter } = orderUpdateReq;
-    let order: any = await Orders.findById(params.id);
+    let order: any = await Orders.findById(id);
     if (
       (order.status == "finished" || order.status == "confirmed") &&
       setter.status == "current"

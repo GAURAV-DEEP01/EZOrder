@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { Orders_t, OrderedItem_t } from "../types/orders";
 import dbUtil from "../database/dbUtils";
-import mongoose from "mongoose";
 import AppError from "../types/AppError";
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get("/", async (_, res) => {
   try {
     const AllOrders: Orders_t[] = await dbUtil.getAllOrders();
     res
@@ -62,8 +61,9 @@ router.post("/", async (req, res) => {
 });
 
 router.patch("/:id", async (req, res) => {
+  const { id } = req.params;
   try {
-    await dbUtil.updateOrder(req.params as Orders_t, req.body as Orders_t);
+    await dbUtil.updateOrder(id, req.body as Orders_t);
     res.status(200).send({ success: true, msg: "Update Complete" });
   } catch (e) {
     if (e instanceof Error)
